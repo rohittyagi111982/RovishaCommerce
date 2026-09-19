@@ -1,0 +1,14 @@
+<article class="product-card">
+  <a [routerLink]="['/products', product.id]">
+    <img [src]="product.imageUrl" [alt]="product.name">
+  </a>
+
+  <div class="product-info">
+    <small>{{ product.categoryName }}</small>
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.description }}</p>
+    <div>⭐ {{ product.rating }}</div>
+    <div class="price">₹{{ product.price | number }}</div>
+    <button [routerLink]="['/products', product.id]">View Details</button>
+  </div>
+</article>

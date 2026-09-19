@@ -1,0 +1,21 @@
+<section class="products-page">
+  <div class="container">
+    <h1>Rovisha Products</h1>
+
+    @if (loading) {
+      <p>Loading products...</p>
+    }
+
+    @if (errorMessage) {
+      <p class="error">{{ errorMessage }}</p>
+    }
+
+    @if (!loading && !errorMessage) {
+      <div class="product-grid">
+        @for (product of products; track product.id) {
+          <app-product-card [product]="product"></app-product-card>
+        }
+      </div>
+    }
+  </div>
+</section>
