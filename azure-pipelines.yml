@@ -54,35 +54,34 @@ steps:
 - powershell: |
 
     $angularPath = "$(Build.SourcesDirectory)\$(angularProject)\$(angularOutput)"
+    $browserPath = "$angularPath\browser"
     $publicPath = "$(Build.SourcesDirectory)\$(nodeApp)\public"
 
     Write-Host "Angular build path:"
     Write-Host $angularPath
 
+    Write-Host "Angular browser path:"
+    Write-Host $browserPath
+
     Write-Host "Public folder:"
     Write-Host $publicPath
 
-    # Verify Angular build exists
-    if (!(Test-Path $angularPath)) {
-        Write-Error "Angular build folder not found: $angularPath"
+    if (!(Test-Path $browserPath)) {
+        Write-Error "Angular browser build folder not found: $browserPath"
         exit 1
     }
 
-    # Create public folder if required
     if (!(Test-Path $publicPath)) {
         New-Item -ItemType Directory -Path $publicPath -Force | Out-Null
     }
 
-    # Remove old Angular files
     Remove-Item "$publicPath\*" -Recurse -Force -ErrorAction SilentlyContinue
 
-    # Copy new Angular build
-    Copy-Item "$angularPath\*" $publicPath -Recurse -Force
+    Copy-Item "$browserPath\*" $publicPath -Recurse -Force
 
-    Write-Host "Angular build copied successfully."
+    Write-Host "Angular browser build copied successfully."
 
-  displayName: 'Copy Angular build to cloud-app'
-
+  displayName: 'Copy Angular browser build to cloud-app'
 
 # ==========================================
 # 6. Install Node/JSON Server dependencies
