@@ -1,0 +1,129 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  nodeVersion: '24.x'
+  angularProject: 'rovisha-commerce-frontend'
+  nodeApp: 'cloud-app'
+  angularOutput: 'dist/rovisha-web'
+  azureSubscription: 'Rovisha-Azure'
+  appName: 'rohit01'
+
+steps:
+
+# ==========================================
+# 1. Checkout GitHub repository
+# ==========================================
+- checkout: self
+  displayName: 'Checkout source code'
+
+
+# ==========================================
+# 2. Install Node.js
+# ==========================================
+- task: NodeTool@0
+  displayName: 'Install Node.js'
+  inputs:
+    versionSpec: '$(nodeVersion)'
+
+
+# ==========================================
+# 3. Install Angular dependencies
+# ==========================================
+- script: |
+    cd $(angularProject)
+    npm ci
+  displayName: 'Install Angular dependencies'
+
+
+# ==========================================
+# 4. Build Angular application
+# ==========================================
+- script: |
+    cd $(angularProject)
+    npx ng build --configuration production
+  displayName: 'Build Angular Production'
+
+
+# ==========================================
+# 5. Copy Angular build to cloud-app/public
+# ==========================================
+- powershell: |
+
+    $angularPath = "$(Build.SourcesDirectory)\$(angularProject)\$(angularOutput)"
+    $publicPath = "$(Build.SourcesDirectory)\$(nodeApp)\public"
+
+    Write-Host "Angular build path:"
+    Write-Host $angularPath
+
+    Write-Host "Public folder:"
+    Write-Host $publicPath
+
+    # Verify Angular build exists
+    if (!(Test-Path $angularPath)) {
+        Write-Error "Angular build folder not found: $angularPath"
+        exit 1
+    }
+
+    # Create public folder if required
+    if (!(Test-Path $publicPath)) {
+        New-Item -ItemType Directory -Path $publicPath -Force | Out-Null
+    }
+
+    # Remove old Angular files
+    Remove-Item "$publicPath\*" -Recurse -Force -ErrorAction SilentlyContinue
+
+    # Copy new Angular build
+    Copy-Item "$angularPath\*" $publicPath -Recurse -Force
+
+    Write-Host "Angular build copied successfully."
+
+  displayName: 'Copy Angular build to cloud-app'
+
+
+# ==========================================
+# 6. Install Node/JSON Server dependencies
+# ==========================================
+- script: |
+    cd $(nodeApp)
+    npm ci --omit=dev
+  displayName: 'Install backend dependencies'
+
+
+# ==========================================
+# 7. Create deployment ZIP
+# ==========================================
+- task: ArchiveFiles@2
+  displayName: 'Create deployment ZIP'
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)/$(nodeApp)'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/rohit01.zip'
+    replaceExistingArchive: true
+
+
+# ==========================================
+# 8. Publish deployment artifact
+# ==========================================
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish deployment artifact'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/rohit01.zip'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+
+# ==========================================
+# 9. Deploy to Azure App Service
+# ==========================================
+- task: AzureWebApp@1
+  displayName: 'Deploy to rohit01'
+  inputs:
+    azureSubscription: '$(azureSubscription)'
+    appType: 'webApp'
+    appName: '$(appName)'
+    package: '$(Build.ArtifactStagingDirectory)/rohit01.zip'

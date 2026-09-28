@@ -1,0 +1,70 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Rovisha Pro Laptop",
+      "description": "High-performance laptop for developers and professionals.",
+      "price": 74999,
+      "categoryId": 1,
+      "categoryName": "Laptops",
+      "brand": "Rovisha",
+      "imageUrl": "https://placehold.co/600x400?text=Rovisha+Laptop",
+      "rating": 4.6,
+      "stock": 15
+    },
+    {
+      "id": 2,
+      "name": "Rovisha Smart Phone",
+      "description": "Premium smartphone with advanced camera and performance.",
+      "price": 39999,
+      "categoryId": 2,
+      "categoryName": "Mobiles",
+      "brand": "Rovisha",
+      "imageUrl": "https://placehold.co/600x400?text=Rovisha+Mobile",
+      "rating": 4.5,
+      "stock": 25
+    },
+    {
+      "id": 3,
+      "name": "Rovisha Wireless Headphones",
+      "description": "Noise-cancelling wireless headphones.",
+      "price": 4999,
+      "categoryId": 3,
+      "categoryName": "Audio",
+      "brand": "Rovisha",
+      "imageUrl": "https://placehold.co/600x400?text=Headphones",
+      "rating": 4.3,
+      "stock": 50
+    },
+    {
+      "id": 4,
+      "name": "Rovisha Smart Watch",
+      "description": "Fitness and activity tracking smartwatch.",
+      "price": 6999,
+      "categoryId": 4,
+      "categoryName": "Wearables",
+      "brand": "Rovisha",
+      "imageUrl": "https://placehold.co/600x400?text=Smart+Watch",
+      "rating": 4.2,
+      "stock": 30
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Laptops"
+    },
+    {
+      "id": 2,
+      "name": "Mobiles"
+    },
+    {
+      "id": 3,
+      "name": "Audio"
+    },
+    {
+      "id": 4,
+      "name": "Wearables"
+    }
+  ]
+}

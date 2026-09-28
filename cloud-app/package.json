@@ -1,0 +1,13 @@
+{
+  "name": "rovisha-mock-api",
+  "version": "1.0.0",
+  "description": "Mock API for Rovisha Commerce",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.22.3",
+    "json-server": "^0.17.4"
+  }
+}
